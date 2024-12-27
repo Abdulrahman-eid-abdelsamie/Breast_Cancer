@@ -41,6 +41,13 @@ def index():
 
     return render_template('index.html', result=result, error=error_message)
 
+@app.errorhandler(413)
+def request_entity_too_large(error):
+    app.logger.error("Uploaded file exceeds size limit.")
+    if request.content_type == 'application/json' or 'application/json' in request.headers.get('Accept', ''):
+        return jsonify({'error': 'File size exceeds the 150 KB limit.'}), 413
+    return render_template('index.html', error="File size exceeds the 150 KB limit."), 413
+
 
 @app.route('/api/predict', methods=['POST'])
 def api_predict():
