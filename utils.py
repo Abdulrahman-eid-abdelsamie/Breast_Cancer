@@ -122,26 +122,48 @@ from tensorflow.keras.models import load_model
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# Load Autoencoder model
+current_dir = os.path.dirname(os.path.abspath(__file__))
 try:
-    autoencoder_model_path = r"D:\API_Brast Cancer\Autoencoder_breast_cancer16.h5"
+    autoencoder_model_path = os.path.join(current_dir, "Autoencoder_breast_cancer16.h5")
     autoencoder = load_model(autoencoder_model_path)
-    logger.info("Autoencoder model loaded successfully.")
+    logging.info("Anomaly detection model loaded successfully.")
 except Exception as e:
-    logger.error(f"Failed to load Autoencoder model: {e}")
-    raise RuntimeError("Autoencoder model could not be loaded.")
+    logging.error(f"Failed to load anomaly detection model: {e}")
+    raise RuntimeError(f"Anomaly detection model could not be loaded: {e}")
 
-# Load TFLite model
+# تحميل نموذج TFLite
 try:
-    tflite_model_path = r"D:\API_Brast Cancer\SAVED_Breast_Cancer1.keras.tflite"
+    tflite_model_path = os.path.join(current_dir, "SAVED_Breast_Cancer1.keras.tflite")
     interpreter = tf.lite.Interpreter(model_path=tflite_model_path)
     interpreter.allocate_tensors()
     input_details = interpreter.get_input_details()
     output_details = interpreter.get_output_details()
-    logger.info("TFLite model loaded successfully.")
+    logging.info("TFLite model loaded successfully.")
 except Exception as e:
-    logger.error(f"Failed to load TFLite model: {e}")
-    raise RuntimeError("TFLite model could not be loaded.")
+    logging.error(f"Failed to load TFLite model: {e}")
+    raise RuntimeError(f"TFLite model could not be loaded: {e}")
+
+
+# Load Autoencoder model
+# try:
+#     autoencoder_model_path = r"D:\API_Brast Cancer\Autoencoder_breast_cancer16.h5"
+#     autoencoder = load_model(autoencoder_model_path)
+#     logger.info("Autoencoder model loaded successfully.")
+# except Exception as e:
+#     logger.error(f"Failed to load Autoencoder model: {e}")
+#     raise RuntimeError("Autoencoder model could not be loaded.")
+
+# # Load TFLite model
+# try:
+#     tflite_model_path = r"D:\API_Brast Cancer\SAVED_Breast_Cancer1.keras.tflite"
+#     interpreter = tf.lite.Interpreter(model_path=tflite_model_path)
+#     interpreter.allocate_tensors()
+#     input_details = interpreter.get_input_details()
+#     output_details = interpreter.get_output_details()
+#     logger.info("TFLite model loaded successfully.")
+# except Exception as e:
+#     logger.error(f"Failed to load TFLite model: {e}")
+#     raise RuntimeError("TFLite model could not be loaded.")
 
 # أنواع الملفات المسموح بها
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
