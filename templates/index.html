@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breast Cancer Detection</title>
+    <!-- إضافة الرابط إلى الأيقونة -->
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+    <div style="margin: 20px;">
+        <header>
+            <h1>Breast Cancer Detection using AI</h1>
+        </header>
+
+        <!-- عرض الخطأ إذا كان موجوداً -->
+        {% if error %}
+            <div style="color: red; font-weight: bold;">
+                <p>{{ error }}</p>
+            </div>
+        {% endif %}
+        
+        <!-- نموذج رفع الصورة -->
+        <form method="POST" enctype="multipart/form-data">
+            <label for="file" style="font-size: 1.2em;">Upload Breast Image:</label>
+            <input type="file" id="file" name="file" accept="image/*" required>
+            <button type="submit" style="padding: 10px 20px; font-size: 1em; margin-top: 10px;">Predict</button>
+        </form>
+
+        <!-- عرض نتيجة التنبؤ إذا كانت موجودة -->
+        {% if result %}
+            <div style="margin-top: 20px;">
+                <h2>Prediction Result</h2>
+                <p>{{ result }}</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
