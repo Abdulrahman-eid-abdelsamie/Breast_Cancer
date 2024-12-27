@@ -1,6 +1,6 @@
 
 opencv-python-headless>=4.10.0
-NumPy==1.23.6
+NumPy==1.21.6
 TensorFlow==2.11.0
 click==8.0.4
 Flask==2.2.2
