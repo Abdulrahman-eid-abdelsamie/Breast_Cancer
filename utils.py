@@ -30,28 +30,6 @@ except Exception as e:
     logging.error(f"Failed to load TFLite model: {e}")
     raise RuntimeError(f"TFLite model could not be loaded: {e}")
 
-
-# Load Autoencoder model
-# try:
-#     autoencoder_model_path = r"D:\API_Brast Cancer\Autoencoder_breast_cancer16.h5"
-#     autoencoder = load_model(autoencoder_model_path)
-#     logger.info("Autoencoder model loaded successfully.")
-# except Exception as e:
-#     logger.error(f"Failed to load Autoencoder model: {e}")
-#     raise RuntimeError("Autoencoder model could not be loaded.")
-
-# # Load TFLite model
-# try:
-#     tflite_model_path = r"D:\API_Brast Cancer\SAVED_Breast_Cancer1.keras.tflite"
-#     interpreter = tf.lite.Interpreter(model_path=tflite_model_path)
-#     interpreter.allocate_tensors()
-#     input_details = interpreter.get_input_details()
-#     output_details = interpreter.get_output_details()
-#     logger.info("TFLite model loaded successfully.")
-# except Exception as e:
-#     logger.error(f"Failed to load TFLite model: {e}")
-#     raise RuntimeError("TFLite model could not be loaded.")
-
 # أنواع الملفات المسموح بها
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
@@ -68,6 +46,12 @@ def preprocess_image(image_path, target_size=(50, 50)):
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img = cv2.resize(img, target_size)
         img = img.astype('float32') / 255.0
+        # فحص إذا كانت الصورة سوداء بالكامل أو بيضاء بالكامل أو داكنة جدًا
+        if np.all(img == 0) or np.all(img >= 0.90) or np.mean(img) < 0.3:
+            logging.info("This is not a valid breast cancer image.")
+            raise ValueError("This is not a valid breast cancer image.")
+        return True
+        
         return np.expand_dims(img, axis=0)
     except Exception as e:
         logger.error(f"Error during image preprocessing: {e}")
@@ -83,10 +67,10 @@ def is_anomalous(image_path, threshold=0.035 * 0.1):
         return error > threshold
     except Exception as e:
         logger.error(f"Anomaly detection failed: {e}")
-        raise ValueError("Anomaly detection failed.")
-       # فحص إذا كانت الصورة سوداء بالكامل أو بيضاء بالكامل أو داكنة جدًا
-        if np.all(processed_image == 0) or np.all(processed_image >= 0.90) or np.mean(processed_image) < 0.3:
-            return True
+        # raise ValueError("Anomaly detection failed.")
+        return True
+
+
 
 def predict_image(image_path):
     """إجراء توقع باستخدام نموذج TFLite."""
