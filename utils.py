@@ -1,3 +1,4 @@
+
 import os
 import logging
 import cv2
@@ -87,5 +88,3 @@ def predict_and_format_result(image_path):
     if is_anomalous(image_path):
         return "This is not a valid breast cancer image."
     return predict_image(image_path)
-
-
