@@ -186,7 +186,7 @@ def preprocess_image(image_path, target_size=(50, 50)):
         logger.error(f"Error during image preprocessing: {e}")
         raise ValueError("Image preprocessing failed.")
 
-def is_anomalous(image_path, threshold=0.03*0.4):
+def is_anomalous(image_path, threshold=0.035 * 0.1):
     """التحقق مما إذا كانت الصورة شاذة باستخدام Autoencoder."""
     try:
         image = preprocess_image(image_path)
@@ -197,6 +197,9 @@ def is_anomalous(image_path, threshold=0.03*0.4):
     except Exception as e:
         logger.error(f"Anomaly detection failed: {e}")
         raise ValueError("Anomaly detection failed.")
+       # فحص إذا كانت الصورة سوداء بالكامل أو بيضاء بالكامل أو داكنة جدًا
+        if np.all(processed_image == 0) or np.all(processed_image >= 0.90) or np.mean(processed_image) < 0.3:
+            return True
 
 def predict_image(image_path):
     """إجراء توقع باستخدام نموذج TFLite."""
