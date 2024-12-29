@@ -57,7 +57,7 @@ def preprocess_image(image_path, target_size=(50, 50)):
         logger.error(f"Error during image preprocessing: {e}")
         raise ValueError("Image preprocessing failed.")
 
-def is_anomalous(image_path, threshold=0.035 * 0.1):
+def is_anomalous(image_path, threshold=0.03*0.4):
     """التحقق مما إذا كانت الصورة شاذة باستخدام Autoencoder."""
     try:
         image = preprocess_image(image_path)
