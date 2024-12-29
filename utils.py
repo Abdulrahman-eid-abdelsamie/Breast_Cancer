@@ -44,9 +44,9 @@ def preprocess_image(image_path, target_size=(50, 50)):
         img = cv2.imread(image_path)
         if img is None:
             raise ValueError("Image not found or invalid format.")
-        if np.all(img == 0) or np.all(img >= 0.90) or np.mean(img) < 0.3:
+        if np.all(img == 0) or np.all(img >= 0.90) or np.mean(img) < 0.4:
             logger.info("The image is either completely black, completely white, or too dark and considered anomalous.")
-            return None
+            return True
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img = cv2.resize(img, target_size)
         img = img.astype('float32') / 255.0
@@ -88,3 +88,4 @@ def predict_and_format_result(image_path):
     if is_anomalous(image_path):
         return "This is not a valid breast cancer image."
     return predict_image(image_path)
+
