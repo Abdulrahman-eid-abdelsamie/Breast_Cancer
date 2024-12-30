@@ -44,9 +44,11 @@ def preprocess_image(image_path, target_size=(50, 50)):
         img = cv2.imread(image_path)
         if img is None:
             raise ValueError("Image not found or invalid format.")
-        if np.all(img == 0) or np.all(img >= 0.90) or np.mean(img) < 0.4:
+        
+        if np.all(img == 0) or np.all(img == 1) or np.mean(img) < 0.3:
             logger.info("This is not a valid breast cancer image.")
             return True
+        
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img = cv2.resize(img, target_size)
         img = img.astype('float32') / 255.0
@@ -55,7 +57,7 @@ def preprocess_image(image_path, target_size=(50, 50)):
         logger.error(f"Error during image preprocessing: {e}")
         raise ValueError("Image preprocessing failed.")
 
-def is_anomalous(image_path, threshold=0.03 * 0.4):
+def is_anomalous(image_path, threshold=0.03 * 0.01):
     """التحقق مما إذا كانت الصورة شاذة باستخدام Autoencoder."""
     try:
         image = preprocess_image(image_path)
